@@ -1,6 +1,5 @@
 import pygame
 from pygame.constants import QUIT, K_DOWN, K_UP, K_LEFT, K_RIGHT, K_SPACE, K_q, K_r, K_w, K_a, K_s, K_d
-from os import listdir
 import random
 
 is_working = True
@@ -8,12 +7,18 @@ game_state = 'start_screen'
 is_initial_set_events_timers = True
 is_spawn_protection = False
 
-BG_IMG_PATH = './assets/images/background.png'
-COIN_IMG_PATH = './assets/images/bonus.png'
-ENEMY_IMG_PATH = './assets/images/enemy.png'
-PLAYER_IMGS_PATH = './assets/images/goose'
-HEART_IMG_PATH = './assets/images/heart.png'
-FONT_PATH = './assets/fonts/Rubik_Iso/RubikIso-Regular.ttf'
+BG_IMG = pygame.image.load('assets/images/background.png')
+COIN_IMG = pygame.image.load('assets/images/bonus.png')
+ENEMY_IMG = pygame.image.load('assets/images/enemy.png')
+PLAYER_IMGS = [
+    pygame.image.load('assets/images/goose/1-1.png'), 
+    pygame.image.load('assets/images/goose/1-2.png'), 
+    pygame.image.load('assets/images/goose/1-3.png'), 
+    pygame.image.load('assets/images/goose/1-4.png'), 
+    pygame.image.load('assets/images/goose/1-5.png')
+]
+HEART_IMG = pygame.image.load('assets/images/heart.png')
+FONT_PATH = 'assets/fonts/Rubik_Iso/RubikIso-Regular.ttf'
 
 BLACK_COLOR = (0, 0, 0)
 WHITE_COLOR = (255, 255, 255)
@@ -49,13 +54,13 @@ display_info = pygame.display.Info()
 screen = w, h = 1440, 768
 main_surface = pygame.display.set_mode(screen)
 
-bg = pygame.transform.scale(pygame.image.load(BG_IMG_PATH).convert(), screen)
+bg = pygame.transform.scale(BG_IMG.convert(), screen)
 bgX = 0
 bgX2 = bg.get_width()
 
 font = pygame.font.Font(FONT_PATH, 40)
 
-heart_surface = pygame.transform.scale(pygame.image.load(HEART_IMG_PATH).convert_alpha(), HEART_SIZE)
+heart_surface = pygame.transform.scale(HEART_IMG.convert_alpha(), HEART_SIZE)
 
 # CREATE EVENTS
 CREATE_ENEMY = pygame.USEREVENT + 0
@@ -70,19 +75,18 @@ def set_spawn_timers():
     pygame.time.set_timer(CHANGE_PLAYER_FRAME, CHANGE_PLAYER_FRAME_PERIOD)
 
 def create_player():
-    player_frames = [pygame.image.load(PLAYER_IMGS_PATH + '/' + file).convert_alpha() for file in listdir(PLAYER_IMGS_PATH)]
-    player = player_frames[player_frames_index]
+    player = PLAYER_IMGS[player_frames_index].convert_alpha()
     player_rect = pygame.Rect(0, h/2, *player.get_size())
-    return {"surface": player, "rect": player_rect, "frames": player_frames}
+    return {"surface": player, "rect": player_rect, "frames": PLAYER_IMGS}
 
 def create_enemy():
-    enemy = pygame.transform.scale(pygame.image.load(ENEMY_IMG_PATH).convert_alpha(), ENEMY_SIZE)
+    enemy = pygame.transform.scale(ENEMY_IMG.convert_alpha(), ENEMY_SIZE)
     enemy_rect = pygame.Rect(w + enemy.get_width(), random.randint(0, h), *enemy.get_size())
     enemy_speed = random.randint(ENEMY_SPEED_RANGE[0], ENEMY_SPEED_RANGE[1])
     return {"surface": enemy, "rect": enemy_rect, "speed": enemy_speed}
 
 def create_coin():
-    coin = pygame.transform.scale(pygame.image.load(COIN_IMG_PATH).convert_alpha(), COIN_SIZE)
+    coin = pygame.transform.scale(COIN_IMG.convert_alpha(), COIN_SIZE)
     coin_rect = pygame.Rect(random.randint(0, w), 0 - coin.get_height(), *coin.get_size())
     coin_speed = random.randint(COIN_SPEED_RANGE[0], COIN_SPEED_RANGE[1])
     return {"surface": coin, "rect": coin_rect, "speed": coin_speed}
