@@ -50,9 +50,8 @@ pygame.init()
 FPS = pygame.time.Clock()
 
 display_info = pygame.display.Info()
-# screen = w, h = display_info.current_w, display_info.current_h
-screen = w, h = 1440, 768
-main_surface = pygame.display.set_mode(screen)
+screen = w, h = display_info.current_w, display_info.current_h
+main_surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
 bg = pygame.transform.scale(BG_IMG.convert(), screen)
 bgX = 0
@@ -92,8 +91,10 @@ def create_coin():
     return {"surface": coin, "rect": coin_rect, "speed": coin_speed}
 
 def create_start_screen():
-    title = font.render('Press Space to start game', True, BLACK_COLOR)
+    title = font.render('Press Space to start game!', True, BLACK_COLOR)
+    leave = font.render('Q to exit game', True, BLACK_COLOR)
     main_surface.blit(title, (w/2 - title.get_width()/2, h/2 - title.get_height()/2))
+    main_surface.blit(leave, (w/2 - leave.get_width()/2, h/1.8 + leave.get_height()))
 
 def draw_game_over_screen():
     title = font.render('Game Over', True, BLACK_COLOR)
@@ -152,7 +153,8 @@ while is_working:
             player_health = 3
             player = create_player()
             game_state = 'game_start'
-
+        if pressed_key[K_q]:
+            is_working = False
 
     elif game_state == 'game_start':
         if is_initial_set_events_timers:
