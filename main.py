@@ -2,7 +2,6 @@ import pygame
 from pygame.constants import QUIT, K_DOWN, K_UP, K_LEFT, K_RIGHT, K_SPACE, K_q, K_r, K_w, K_a, K_s, K_d
 from os import listdir
 import random
-from threading import Timer
 
 is_working = True
 game_state = 'start_screen'
